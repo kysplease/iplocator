@@ -1,14 +1,7 @@
 import argparse
-from time import sleep
+import requests
 from colorama import Fore, init
-init()
-try:
-    import requests
-except ImportError:
-    print("{}IPLocator is dependant on Requests which can be found at "
-          "http://docs.python-requests.org{}".format(Fore.LIGHTRED_EX, Fore.RESET))
-    sleep(10)
-    exit(1)
+init(autoreset=True)
 
 parser = argparse.ArgumentParser(description="IPLocator v1.0 by kysplease")
 parser.add_argument("ip", help="IP to locate")
@@ -23,13 +16,8 @@ if data.get("status") == "success":
             "zip", "timezone", "lon", "lat", "org", "isp", "as"]
 
     for i in range(0, len(keys)):
-        print("{}{}: {}{}".format(Fore.LIGHTGREEN_EX, keys[i].upper(),
-                                      data.get(keys[i]), Fore.RESET))
+        print("{}{}: {}".format(Fore.LIGHTGREEN_EX, keys[i].upper(),
+                                      data.get(keys[i])))
 
 else:
-    print("{}IP location failed!{}".format(Fore.LIGHTRED_EX, Fore.RESET))
-
-
-
-
-
+    print("{}IP location failed! Maybe the address is invalid or down?".format(Fore.LIGHTRED_EX))
