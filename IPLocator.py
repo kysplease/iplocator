@@ -1,4 +1,5 @@
 import argparse
+from time import sleep
 from colorama import Fore, init
 init()
 try:
@@ -6,6 +7,7 @@ try:
 except ImportError:
     print("{}IPLocator is dependant on Requests which can be found at "
           "http://docs.python-requests.org{}".format(Fore.LIGHTRED_EX, Fore.RESET))
+    sleep(10)
     exit(1)
 
 parser = argparse.ArgumentParser(description="IPLocator v1.0 by kysplease")
