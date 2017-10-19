@@ -1,23 +1,53 @@
 import argparse
 import requests
+import webbrowser
 from colorama import Fore, init
-init(autoreset=True)
 
-parser = argparse.ArgumentParser(description="IPLocator v1.0 by kysplease")
-parser.add_argument("ip", help="IP to locate")
-args = parser.parse_args()
 
-r = requests.get("http://ip-api.com/json/{}".format(args.ip))
+def locate(ip, pp):
+    init(autoreset=True)
 
-data = dict(r.json())
+    r = requests.get("http://ip-api.com/json/{}".format(ip))
 
-if data.get("status") == "success":
-    keys = ["query", "country", "countryCode", "region", "regionName", "city",
-            "zip", "timezone", "lon", "lat", "org", "isp", "as"]
+    data = dict(r.json())
 
-    for i in range(0, len(keys)):
-        print("{}{}: {}".format(Fore.LIGHTGREEN_EX, keys[i].upper(),
-                                      data.get(keys[i])))
+    if data.get("status") == "success":
+        keys = ["query", "country", "countryCode", "region", "regionName", "city",
+                "zip", "timezone", "lat", "lon", "org", "isp", "as"]
 
-else:
-    print("{}IP location failed! Maybe the address is invalid or down?".format(Fore.LIGHTRED_EX))
+        for i in range(0, len(keys)):
+            print("{}{}: {}".format(Fore.LIGHTGREEN_EX, keys[i].upper(),
+                                    data.get(keys[i])))
+
+        if pp:
+            webbrowser.open("https://www.google.com/maps/search/?api=1&query={},{}".format(
+                data.get(keys[8]), data.get(keys[9])), autoraise=True)
+    else:
+        print("{}IP location failed! Maybe the address is invalid or down?".format(Fore.LIGHTRED_EX))
+
+
+def main():
+    init()
+
+    iplocator = """{} \t[+++] IPLocator v1.1 by kysplease [+++]
+  _____ _____  _                     _             
+ |_   _|  __ \| |                   | |            
+   | | | |__) | |     ___   ___ __ _| |_ ___  _ __ 
+   | | |  ___/| |    / _ \ / __/ _` | __/ _ \| '__|
+  _| |_| |    | |___| (_) | (_| (_| | || (_) | |   
+ |_____|_|    |______\___/ \___\__,_|\__\___/|_|   {}""".format(Fore.LIGHTGREEN_EX,
+                                                                Fore.RED)
+
+    print(iplocator)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("ip", help="IP to locate")
+    parser.add_argument("-pp", "--pinpoint", action='store_true',
+                        default=False, dest='pp',
+                        help="Open the latitude and longitude in google maps, default is false")
+    args = parser.parse_args()
+
+    locate(args.ip, args.pp)
+
+if __name__ == '__main__':
+    main()
