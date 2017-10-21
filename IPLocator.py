@@ -1,7 +1,12 @@
 import argparse
-import requests
 import webbrowser
-from colorama import Fore, init
+try:
+    import requests
+    from colorama import Fore, init
+except ModuleNotFoundError:
+    print("IPLocator depends on requests 2.18.4 and colorama 0.3.9\n"
+          "run 'pip install -r requirements.txt' in order to install these.")
+    exit(1)
 
 
 def locate(ip, pp):
@@ -23,13 +28,14 @@ def locate(ip, pp):
             webbrowser.open("https://www.google.com/maps/search/?api=1&query={},{}".format(
                 json.get(keys[8]), json.get(keys[9])), autoraise=True)
     else:
-        print("{}IP location failed! Maybe the address is invalid or down?".format(Fore.LIGHTRED_EX))  # display if request was unsuccessful
+        print("{}IP location failed! Maybe the address is invalid or down?".
+              format(Fore.LIGHTRED_EX))  # display if request was unsuccessful
 
 
 def main():  # parse arguments
     init()  # initiate colorama without automatically resetting the color
 
-    iplocator = """{} \t[+++] IPLocator v1.1 by kysplease [+++]
+    iplocator = """{} \t[+++] IPLocator v1.2 by kysplease [+++]
   _____ _____  _                     _             
  |_   _|  __ \| |                   | |            
    | | | |__) | |     ___   ___ __ _| |_ ___  _ __ 
