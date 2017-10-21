@@ -9,19 +9,19 @@ def locate(ip, pp):
 
     r = requests.get("http://ip-api.com/json/{}".format(ip))
 
-    data = dict(r.json())
+    json = r.json()
 
-    if data.get("status") == "success":
+    if json.get("status") == "success":
         keys = ["query", "country", "countryCode", "region", "regionName", "city",
                 "zip", "timezone", "lat", "lon", "org", "isp", "as"]
 
         for i in range(0, len(keys)):
             print("{}{}: {}".format(Fore.LIGHTGREEN_EX, keys[i].upper(),
-                                    data.get(keys[i])))
+                                    json.get(keys[i])))
 
         if pp:
             webbrowser.open("https://www.google.com/maps/search/?api=1&query={},{}".format(
-                data.get(keys[8]), data.get(keys[9])), autoraise=True)
+                json.get(keys[8]), json.get(keys[9])), autoraise=True)
     else:
         print("{}IP location failed! Maybe the address is invalid or down?".format(Fore.LIGHTRED_EX))
 
